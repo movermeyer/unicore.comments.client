@@ -1,6 +1,7 @@
 import json
 from datetime import datetime
 import pytz
+from dateutil.parser import parse as parse_dt
 
 from unicore.comments.client.base import (
     BaseClient, BaseClientObject, CommentServiceException)
@@ -58,8 +59,15 @@ class CommentClient(BaseClient):
             raise e
 
 
-
 class Comment(BaseClientObject):
+
+    def __init__(self, client, data):
+        super(Comment, self).__init__(client, data)
+        self.coerce_fields()
+
+    def coerce_fields(self):
+        self.set('submit_datetime', parse_dt(self.get('submit_datetime')))
+        self.set('flag_count', int(self.get('flag_count')))
 
     def set(self, field, value):
         if field == 'uuid':
