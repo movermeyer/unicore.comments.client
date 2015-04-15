@@ -2,7 +2,16 @@ import json
 from datetime import datetime
 import pytz
 
-from unicore.comments.client.base import BaseClient, BaseClientObject
+from unicore.comments.client.base import (
+    BaseClient, BaseClientObject, CommentServiceException)
+
+
+class UserBanned(CommentServiceException):
+    pass
+
+
+class CommentStreamNotOpen(CommentServiceException):
+    pass
 
 
 class CommentClient(BaseClient):
@@ -22,7 +31,15 @@ class CommentClient(BaseClient):
         return CommentPage(self, data)
 
     def create_comment(self, data):
-        new_data = self.post('', data=data)
+        try:
+            new_data = self.post('', data=data)
+        except CommentServiceException as e:
+            if e.error_code == 'USER_BANNED':
+                raise UserBanned(e.response)
+            elif e.error_code == 'STREAM_NOT_OPEN':
+                raise CommentStreamNotOpen(e.response)
+            raise e
+
         return Comment(self, new_data)
 
     def create_flag(self, data):
