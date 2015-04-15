@@ -1,4 +1,4 @@
-from unicore.hub.client.base import ClientException
+from unicore.comments.client.base import ClientException
 
 
 __all__ = [
