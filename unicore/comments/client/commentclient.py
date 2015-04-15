@@ -47,9 +47,16 @@ class CommentClient(BaseClient):
         return resp.status_code == 201
 
     def delete_flag(self, comment_uuid, user_uuid):
-        resp = self._request_no_parse(
-            'delete', '/flags/%s/%s/' % (comment_uuid, user_uuid))
-        return resp.status_code == 200
+        try:
+            self._request_no_parse(
+                'delete', '/flags/%s/%s/' % (comment_uuid, user_uuid))
+            return True
+
+        except CommentServiceException as e:
+            if e.response.status_code == 404:
+                return False
+            raise e
+
 
 
 class Comment(BaseClientObject):

@@ -11,9 +11,10 @@ class CommentServiceException(Exception):
 
     def __init__(self, response):
         self.response = response
-        self.error_code = response.json['error_code']
-        self.error_message = response.json['error_message']
-        self.error_dict = response.json['error_dict']
+        data = response.json()
+        self.error_code = data['error_code']
+        self.error_message = data['error_message']
+        self.error_dict = data['error_dict']
         super(CommentServiceException, self).__init__(
             '%s (HTTP %s): %s' % (
                 self.error_code,
