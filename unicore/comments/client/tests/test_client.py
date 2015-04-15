@@ -3,7 +3,7 @@ from uuid import uuid4
 
 import responses
 
-from unicore.comments.client.base import BaseClient
+from unicore.comments.client import CommentClient
 
 
 class BaseClientTestMixin(object):
@@ -28,5 +28,5 @@ class BaseClientTestMixin(object):
             'host': settings['unicorecomments.host']})
 
 
-class BaseClientTestCase(TestCase, BaseClientTestMixin):
-    client_class = BaseClient
+class CommentClientTestCase(TestCase, BaseClientTestMixin):
+    client_class = CommentClient
