@@ -49,8 +49,7 @@ class CommentClient(BaseClient):
 
     def delete_flag(self, comment_uuid, user_uuid):
         try:
-            self._request_no_parse(
-                'delete', '/flags/%s/%s/' % (comment_uuid, user_uuid))
+            self.delete('/flags/%s/%s/' % (comment_uuid, user_uuid))
             return True
 
         except CommentServiceException as e:

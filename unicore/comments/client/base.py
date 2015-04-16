@@ -63,6 +63,9 @@ class BaseClient(object):
     def get(self, path, *args, **kwargs):
         return self._request('get', path, *args, **kwargs)
 
+    def delete(self, path, *args, **kwargs):
+        return self._request('delete', path, *args, **kwargs)
+
     def post(self, path, *args, **kwargs):
         kwargs['data'] = json.dumps(kwargs['data'])
         return self._request('post', path, *args, **kwargs)
