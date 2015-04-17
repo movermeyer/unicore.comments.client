@@ -46,12 +46,13 @@ class CommentClientTestCase(BaseClientTestMixin, TestCase):
             f.comment_stream_json, status=200, content_type='application/json')
         page = self.client.get_comment_page(
             'app_uuid', 'content_uuid', after='after_uuid',
-            limit=100, offset=20)
+            limit=100, offset=20, before='before_uuid')
 
         self.assertIsInstance(page, CommentPage)
         self.check_request_basics(
-            url='%s/comments/?after=after_uuid&app_uuid=app_uuid&'
-                'content_uuid=content_uuid&limit=100&offset=20' % self.host)
+            url='%s/comments/?after=after_uuid&before=before_uuid&'
+                'app_uuid=app_uuid&content_uuid=content_uuid&'
+                'limit=100&offset=20' % self.host)
 
     @responses.activate
     def test_create_comment(self):

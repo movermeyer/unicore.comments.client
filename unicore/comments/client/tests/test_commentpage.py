@@ -13,9 +13,9 @@ class CommentPageTestCase(TestCase):
         self.page = CommentPage(self.client, f.comment_stream_data)
 
     def test_properties(self):
-        self.assertEqual(self.page.offset, f.comment_stream_data['offset'])
-        self.assertEqual(self.page.limit, f.comment_stream_data['limit'])
-        self.assertEqual(self.page.after, f.comment_stream_data['after'])
+        self.assertEqual(self.page.start, f.comment_stream_data['start'])
+        self.assertEqual(self.page.end, f.comment_stream_data['end'])
+        self.assertEqual(self.page.total, f.comment_stream_data['total'])
         self.assertEqual(self.page.metadata, f.comment_stream_data['metadata'])
         self.assertEqual(
             self.page.state, f.comment_stream_data['metadata']['state'])

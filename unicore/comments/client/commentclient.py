@@ -19,12 +19,13 @@ class CommentClient(BaseClient):
     base_path = '/comments/'
 
     def get_comment_page(self, app_uuid, content_uuid,
-                         after=None, limit=None, offset=None):
+                         before=None, after=None, limit=None, offset=None):
         query = {
             'app_uuid': app_uuid,
             'content_uuid': content_uuid
         }
-        for k, v in zip(('after', 'limit', 'offset'), (after, limit, offset)):
+        for k, v in zip(('before', 'after', 'limit', 'offset'),
+                        (before, after, limit, offset)):
             if v is not None:
                 query[k] = v
 
@@ -100,16 +101,16 @@ class CommentPage(object):
         self.data = data
 
     @property
-    def offset(self):
-        return self.data['offset']
+    def total(self):
+        return self.data['total']
 
     @property
-    def limit(self):
-        return self.data['limit']
+    def start(self):
+        return self.data['start']
 
     @property
-    def after(self):
-        return self.data['after']
+    def end(self):
+        return self.data['end']
 
     @property
     def metadata(self):

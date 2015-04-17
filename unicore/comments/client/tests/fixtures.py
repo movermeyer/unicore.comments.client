@@ -28,9 +28,9 @@ comment_data = {
 }
 comment_json = json.dumps(comment_data)
 comment_stream_data = {
-    'offset': 0,
-    'limit': 10,
-    'after': uuid4().hex,
+    'start': 20,
+    'end': 30,
+    'total': 100,
     'count': 10,
     'objects': map(
         lambda i: dict(comment_data.items() + [('uuid', uuid4().hex)]),
