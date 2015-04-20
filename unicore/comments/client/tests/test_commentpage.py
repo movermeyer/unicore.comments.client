@@ -65,3 +65,30 @@ class CommentPageTestCase(TestCase):
             {'before': last_obj['uuid'],
              'app_uuid': last_obj['app_uuid'],
              'content_uuid': last_obj['content_uuid']})
+
+
+class LazyCommentPageTestCase(CommentPageTestCase):
+
+    def setUp(self):
+        super(LazyCommentPageTestCase, self).setUp()
+        self.client.get_comment_page.return_value = self.page
+        self.page = LazyCommentPage(
+            self.client,
+            limit=10,
+            app_uuid=f.comment_data['app_uuid'],
+            content_uuid=f.comment_data['content_uuid'])
+
+    def test_lazy_loading(self):
+        self.assertIs(self.page._data, None)
+        self.client.get_comment_page.assert_not_called()
+
+        self.assertTrue(self.page.data)
+        self.assertTrue(self.page._data)
+        self.client.get_comment_page.assert_called_with(
+            app_uuid=f.comment_data['app_uuid'],
+            content_uuid=f.comment_data['content_uuid'],
+            limit=10)
+
+        self.client.get_comment_page.reset_mock()
+        self.assertTrue(self.page.data)
+        self.client.get_comment_page.assert_not_called()
