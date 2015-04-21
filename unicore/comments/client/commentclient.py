@@ -126,3 +126,48 @@ class CommentPage(object):
     def __iter__(self):
         for comment_data in self.data['objects']:
             yield Comment(self.client, comment_data)
+
+    def has_next(self):
+        return self.total != 0 and self.end < self.total
+
+    def has_previous(self):
+        return self.total != 0 and self.start > 1
+
+    def get_next_args(self, **defaults):
+        if not self.has_next():
+            return None
+
+        args = defaults.copy()
+        last_obj = self.data['objects'][-1]
+        args.update({
+            'before': last_obj.get('uuid'),
+            'app_uuid': last_obj.get('app_uuid'),
+            'content_uuid': last_obj.get('content_uuid')})
+        return args
+
+    def get_previous_args(self, **defaults):
+        if not self.has_previous():
+            return None
+
+        args = defaults.copy()
+        first_obj = self.data['objects'][0]
+        args.update({
+            'after': first_obj.get('uuid'),
+            'app_uuid': first_obj.get('app_uuid'),
+            'content_uuid': first_obj.get('content_uuid')})
+        return args
+
+
+class LazyCommentPage(CommentPage):
+
+    def __init__(self, client, **page_args):
+        self.client = client
+        self._data = None
+        self.page_args = page_args
+
+    @property
+    def data(self):
+        if self._data is None:
+            page = self.client.get_comment_page(**self.page_args)
+            self._data = page.data
+        return self._data
