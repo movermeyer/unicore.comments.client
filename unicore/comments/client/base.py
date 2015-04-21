@@ -7,8 +7,19 @@ import requests
 from unicore.comments.client.utils import client_from_config
 
 
-class ClientException(Exception):
-    pass
+class CommentServiceException(Exception):
+
+    def __init__(self, response):
+        self.response = response
+        data = response.json()
+        self.error_code = data['error_code']
+        self.error_message = data['error_message']
+        self.error_dict = data['error_dict']
+        super(CommentServiceException, self).__init__(
+            '%s (HTTP %s): %s' % (
+                self.error_code,
+                self.response.status_code,
+                self.error_message))
 
 
 class BaseClient(object):
@@ -45,13 +56,15 @@ class BaseClient(object):
         resp = self.session.request(method, url, *args, **kwargs)
 
         if resp.status_code not in (200, 201, 204):
-            raise ClientException('HTTP %s: %s' %
-                                  (resp.status_code, resp.content))
+            raise CommentServiceException(resp)
 
         return resp
 
     def get(self, path, *args, **kwargs):
         return self._request('get', path, *args, **kwargs)
+
+    def delete(self, path, *args, **kwargs):
+        return self._request('delete', path, *args, **kwargs)
 
     def post(self, path, *args, **kwargs):
         kwargs['data'] = json.dumps(kwargs['data'])
