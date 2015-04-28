@@ -68,7 +68,7 @@ class Comment(BaseClientObject):
     def coerce_fields(self):
         self.set('submit_datetime', parse_dt(self.get('submit_datetime')))
         self.set('flag_count', int(self.get('flag_count')))
-        self.set('is_removed', self.get('is_removed') == 'True')
+        self.set('is_removed', self.get('is_removed') in ('true', 'True'))
 
     def set(self, field, value):
         if field == 'uuid':
