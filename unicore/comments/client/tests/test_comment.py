@@ -16,6 +16,7 @@ class CommentTestCase(TestCase):
     def test_coerce_fields(self):
         self.assertIsInstance(self.comment.data['submit_datetime'], datetime)
         self.assertIsInstance(self.comment.data['flag_count'], int)
+        self.assertIsInstance(self.comment.data['is_removed'], bool)
 
     def test_set(self):
         self.assertRaisesRegexp(
