@@ -11,6 +11,6 @@ Client library to interact with Universal Core's `unicore.comments`
     :target: https://coveralls.io/r/universalcore/unicore.comments.client?branch=develop
     :alt: Code Coverage
 
-.. image:: https://pypip.in/version/unicore.comments.client/badge.svg
+.. image:: https://img.shields.io/pypi/v/unicore.comments.client.svg
     :target: https://pypi.python.org/pypi/unicore.comments.client
     :alt: Pypi Package
